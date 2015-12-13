@@ -7,16 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E0F9CA31C1E093000AE075A /* SnakeActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E0F9CA21C1E093000AE075A /* SnakeActivityIndicatorView.m */; };
 		2E34ED8D1C1E04C9008638D8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E34ED8C1C1E04C9008638D8 /* main.m */; };
 		2E34ED901C1E04C9008638D8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E34ED8F1C1E04C9008638D8 /* AppDelegate.m */; };
 		2E34ED931C1E04C9008638D8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E34ED921C1E04C9008638D8 /* ViewController.m */; };
 		2E34ED961C1E04C9008638D8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E34ED941C1E04C9008638D8 /* Main.storyboard */; };
 		2E34ED981C1E04C9008638D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E34ED971C1E04C9008638D8 /* Assets.xcassets */; };
 		2E34ED9B1C1E04C9008638D8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E34ED991C1E04C9008638D8 /* LaunchScreen.storyboard */; };
-		2E34EDA41C1E0533008638D8 /* SnakeActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E34EDA31C1E0533008638D8 /* SnakeActivityIndicatorView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E0F9CA11C1E093000AE075A /* SnakeActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnakeActivityIndicatorView.h; sourceTree = "<group>"; };
+		2E0F9CA21C1E093000AE075A /* SnakeActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnakeActivityIndicatorView.m; sourceTree = "<group>"; };
 		2E34ED881C1E04C9008638D8 /* SnakeActivityIndicatorViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnakeActivityIndicatorViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E34ED8C1C1E04C9008638D8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2E34ED8E1C1E04C9008638D8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -27,8 +29,6 @@
 		2E34ED971C1E04C9008638D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E34ED9A1C1E04C9008638D8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2E34ED9C1C1E04C9008638D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2E34EDA21C1E0533008638D8 /* SnakeActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnakeActivityIndicatorView.h; sourceTree = "<group>"; };
-		2E34EDA31C1E0533008638D8 /* SnakeActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnakeActivityIndicatorView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,10 +86,11 @@
 		2E34EDA51C1E053D008638D8 /* SnakeActivityIndicatorView */ = {
 			isa = PBXGroup;
 			children = (
-				2E34EDA21C1E0533008638D8 /* SnakeActivityIndicatorView.h */,
-				2E34EDA31C1E0533008638D8 /* SnakeActivityIndicatorView.m */,
+				2E0F9CA11C1E093000AE075A /* SnakeActivityIndicatorView.h */,
+				2E0F9CA21C1E093000AE075A /* SnakeActivityIndicatorView.m */,
 			);
 			name = SnakeActivityIndicatorView;
+			path = ../SnakeActivityIndicatorView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,7 +165,7 @@
 			files = (
 				2E34ED931C1E04C9008638D8 /* ViewController.m in Sources */,
 				2E34ED901C1E04C9008638D8 /* AppDelegate.m in Sources */,
-				2E34EDA41C1E0533008638D8 /* SnakeActivityIndicatorView.m in Sources */,
+				2E0F9CA31C1E093000AE075A /* SnakeActivityIndicatorView.m in Sources */,
 				2E34ED8D1C1E04C9008638D8 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -314,6 +315,7 @@
 				2E34EDA11C1E04C9008638D8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
