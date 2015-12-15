@@ -13,6 +13,7 @@
 @interface ViewController ()
 
 @property (nonatomic) SnakeActivityIndicatorView *sView;
+
 @end
 
 @implementation ViewController
@@ -31,5 +32,14 @@
         [self.sView stopAnimating];
     }
 }
+
+- (IBAction)segmentChanged:(UISegmentedControl *)sender {
+    if (sender.selectedSegmentIndex) {
+        self.sView.animationType = SnakeAnimationTypeRotate;
+    } else {
+        self.sView.animationType = SnakeAnimationTypeScale;
+    }
+}
+
 
 @end

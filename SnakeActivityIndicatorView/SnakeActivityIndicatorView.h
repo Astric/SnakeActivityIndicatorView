@@ -8,10 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, SnakeAnimationType) {
+    SnakeAnimationTypeScale,
+    SnakeAnimationTypeRotate
+};
+
 @interface SnakeActivityIndicatorView : UIView
 
 @property (nonatomic) UIColor *color;
 @property (nonatomic) NSTimeInterval fullCircleDuration;
+@property (nonatomic) SnakeAnimationType animationType;
+@property (nonatomic, readonly) BOOL animating;
 
 - (void)startAnimating;
 - (void)stopAnimating;
