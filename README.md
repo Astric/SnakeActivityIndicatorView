@@ -1,7 +1,10 @@
 # SnakeActivityIndicatorView
 An alternative activity indicator for iOS, written in Objective-C
 
-![snakeactivityindicatorview](https://cloud.githubusercontent.com/assets/2947953/11768910/f657ef70-a1d2-11e5-9538-9242878cc3fa.gif)
+![sav1](https://cloud.githubusercontent.com/assets/2947953/11813039/0fdb7646-a337-11e5-9d8c-daca4572638a.gif)
+SnakeAnimationTypeRotate
+![sav2](https://cloud.githubusercontent.com/assets/2947953/11813041/123fca0e-a337-11e5-80b3-07d13889347d.gif)
+SnakeAnimationTypeScale
 
 #### Adding a view:
 
