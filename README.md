@@ -20,7 +20,7 @@ The activity indicator will fit to the shortest side of the frame but better use
 [snakeView stopAnimating];
 ```
 
-#### Setting a full rotation duration:
+#### Setting a full rotation duration (Applies only on SnakeAnimationTypeScale):
 
 ```objective-c
 //default is 1 sec
