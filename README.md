@@ -1,7 +1,8 @@
 # SnakeActivityIndicatorView
 An alternative activity indicator for iOS, written in Objective-C
 
-![snakeactivityindicatorview](https://cloud.githubusercontent.com/assets/2947953/11768910/f657ef70-a1d2-11e5-9538-9242878cc3fa.gif)
+![SnakeAnimationTypeRotate](https://cloud.githubusercontent.com/assets/2947953/11813039/0fdb7646-a337-11e5-9d8c-daca4572638a.gif)
+![SnakeAnimationTypeScale](https://cloud.githubusercontent.com/assets/2947953/11813041/123fca0e-a337-11e5-80b3-07d13889347d.gif)
 
 #### Adding a view:
 
@@ -19,7 +20,7 @@ The activity indicator will fit to the shortest side of the frame but better use
 [snakeView stopAnimating];
 ```
 
-#### Setting a full rotation duration:
+#### Setting a full rotation duration (Applies only on SnakeAnimationTypeScale):
 
 ```objective-c
 //default is 1 sec
