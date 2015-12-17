@@ -13,6 +13,7 @@
 @interface ViewController ()
 
 @property (nonatomic) SnakeActivityIndicatorView *sView;
+@property (weak, nonatomic) IBOutlet UISlider *slider;
 
 @end
 
@@ -22,7 +23,9 @@
     [super viewDidLoad];
     self.sView = [[SnakeActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     self.sView.center = self.view.center;
+    self.sView.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.2];
     [self.view addSubview:self.sView];
+    
 }
 
 - (IBAction)switchChanged:(UISwitch *)sender {
@@ -31,6 +34,7 @@
     } else {
         [self.sView stopAnimating];
     }
+    self.slider.enabled = !sender.isOn;
 }
 
 - (IBAction)segmentChanged:(UISegmentedControl *)sender {
@@ -41,5 +45,16 @@
     }
 }
 
+- (IBAction)sliderChanged:(UISlider *)sender {
+    BOOL animating = self.sView.animating;
+    if (animating) {
+        [self.sView stopAnimating];
+    }
+    self.sView.frame = CGRectMake(0, 0, sender.value * 200, sender.value * 200);
+    self.sView.center = self.view.center;
+    if (animating) {
+        [self.sView startAnimating];
+    }
+}
 
 @end

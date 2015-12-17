@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, SnakeAnimationType) {
 @interface SnakeActivityIndicatorView : UIView
 
 @property (nonatomic) UIColor *color;
-@property (nonatomic) NSTimeInterval fullCircleDuration;
+@property (nonatomic) NSTimeInterval fullRotationDuration; //applies only on SnakeAnimationTypeScale
 @property (nonatomic) SnakeAnimationType animationType;
 @property (nonatomic, readonly) BOOL animating;
 

@@ -24,15 +24,24 @@
                                 </connections>
                             </switch>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5Jd-MB-sXk">
-                                <rect key="frame" x="120" y="67" width="361" height="29"/>
+                                <rect key="frame" x="246" y="67" width="109" height="29"/>
                                 <segments>
-                                    <segment title="SnakeAnimationTypeScale"/>
-                                    <segment title="SnakeAnimationTypeRotate"/>
+                                    <segment title="Scale"/>
+                                    <segment title="Rotate"/>
                                 </segments>
                                 <connections>
                                     <action selector="segmentChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="6Ok-NV-Hyo"/>
                                 </connections>
                             </segmentedControl>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="dal-m6-61Y">
+                                <rect key="frame" x="159" y="550" width="282" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="278" id="71L-9N-rSt"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="sliderChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Ugg-Oe-Wgb"/>
+                                </connections>
+                            </slider>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -40,11 +49,17 @@
                             <constraint firstItem="SBq-AG-evv" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="8JI-P6-oYE"/>
                             <constraint firstItem="5Jd-MB-sXk" firstAttribute="top" secondItem="SBq-AG-evv" secondAttribute="bottom" constant="8" symbolic="YES" id="JI7-uG-gdK"/>
                             <constraint firstItem="SBq-AG-evv" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" symbolic="YES" id="SHs-NB-olC"/>
+                            <constraint firstItem="dal-m6-61Y" firstAttribute="centerX" secondItem="5Jd-MB-sXk" secondAttribute="centerX" id="Tsi-aP-FVA"/>
+                            <constraint firstAttribute="bottom" secondItem="dal-m6-61Y" secondAttribute="bottom" constant="20" symbolic="YES" id="jkW-3b-cz8"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="slider" destination="dal-m6-61Y" id="Pu5-Wh-G4x"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="228" y="549"/>
         </scene>
     </scenes>
 </document>

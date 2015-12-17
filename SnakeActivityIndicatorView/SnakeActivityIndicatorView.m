@@ -10,7 +10,7 @@
 
 struct SnakeActivityIndicatorViewMetrics {
     CGFloat spinnerRadius;
-    CGFloat circleRadius;
+    CGFloat dotRadius;
     CGPoint spinnerCenter;
 };
 
@@ -19,7 +19,9 @@ typedef struct SnakeActivityIndicatorViewMetrics SnakeActivityIndicatorViewMetri
 @interface SnakeActivityIndicatorView()
 
 @property (nonatomic) SnakeActivityIndicatorViewMetrics metrics;
-@property (nonatomic, readonly) NSInteger numberOfCircles;
+@property (nonatomic, readonly) NSInteger numberOfDots;
+@property (nonatomic, readonly) CAReplicatorLayer *rLayer;
+@property (nonatomic) CAShapeLayer *dotLayer;
 
 @end
 
@@ -28,79 +30,81 @@ typedef struct SnakeActivityIndicatorViewMetrics SnakeActivityIndicatorViewMetri
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self configureView];
-        self.fullCircleDuration = 1;
+        self.fullRotationDuration = 1;
     }
     return self;
 }
 
++ (Class)layerClass {
+    return [CAReplicatorLayer class];
+}
+
+- (CAReplicatorLayer *)rLayer {
+    return (CAReplicatorLayer *)self.layer;
+}
+
 - (void)setColor:(UIColor *)color {
     _color = color;
-    for (NSInteger i = 0; i < self.numberOfCircles; i++) {
-        self.layer.sublayers[i].backgroundColor = [color CGColor];
-    }
+    self.dotLayer.backgroundColor = [color CGColor];
 }
 
 - (void)setAnimationType:(SnakeAnimationType)animationType {
     _animationType = animationType;
-    [self.layer.sublayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [self configureView];
     [self setNeedsLayout];
     if (self.animating) {
         [self startAnimating];
     }
-    
 }
 
-- (NSInteger)numberOfCircles {
+- (NSInteger)numberOfDots {
     return self.animationType == SnakeAnimationTypeScale?8:6;
 }
 
 - (void)configureView {
-    for (NSInteger i = 0; i < self.numberOfCircles; i++) {
-        CAShapeLayer *circleLayer = [CAShapeLayer layer];
-        circleLayer.backgroundColor = [[UIColor colorWithRed:0 green:0.81 blue:.035 alpha:1] CGColor];
-        circleLayer.hidden = YES;
-        [self.layer addSublayer:circleLayer];
-    }
+    [self.dotLayer removeFromSuperlayer];
+    self.dotLayer = [CAShapeLayer layer];
+    //self.dotLayer.backgroundColor = [[UIColor colorWithRed:(arc4random() % 255) / 255.0 green:(arc4random() % 255) / 255.0 blue:(arc4random() % 255) / 255.0 alpha:1] CGColor];
+    self.dotLayer.backgroundColor = [[UIColor colorWithRed:0 green:0.81 blue:.035 alpha:1] CGColor];
+    [self.layer addSublayer:self.dotLayer];
+    self.dotLayer.hidden = YES;
+    self.rLayer.instanceCount = self.numberOfDots;
 }
 
 - (void)layoutSublayersOfLayer:(CALayer *)layer {
     [self calculateMetrics];
+    [CATransaction begin];
+    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    CGFloat dotDiameter = self.metrics.dotRadius * 2;
+    self.dotLayer.cornerRadius = self.metrics.dotRadius;
+    self.dotLayer.frame = CGRectMake(self.metrics.spinnerRadius * 2 - self.metrics.dotRadius,
+                                     self.metrics.spinnerRadius - self.metrics.dotRadius/2,
+                                     dotDiameter,
+                                     dotDiameter);
     
-    CGFloat cx = CGRectGetMidX(self.bounds);
-    CGFloat cy = CGRectGetMidY(self.bounds);
-    
-    for (NSInteger i = 0; i < self.numberOfCircles; i++) {
-        CALayer *circleLayer = (CALayer *)self.layer.sublayers[i];
-        CGFloat x,y;
-        if (self.animationType == SnakeAnimationTypeScale) {
-            x = cx + self.metrics.spinnerRadius * cos(i * M_PI_4);
-            y = cy + self.metrics.spinnerRadius * sin(i * M_PI_4);
-        } else {
-            
-            x = cx + self.metrics.spinnerRadius * cos([self radiansForCircleAtIndex:i]);
-            y = cy + self.metrics.spinnerRadius * sin([self radiansForCircleAtIndex:i]);
-        }
-        circleLayer.frame = CGRectMake(0, 0, self.metrics.circleRadius * 2, self.metrics.circleRadius * 2);
-        circleLayer.position = CGPointMake(x, y);
-        circleLayer.cornerRadius = self.metrics.circleRadius;
+    CGFloat angle;
+    if (self.animationType == SnakeAnimationTypeScale) {
+        angle = -M_PI_4;
+    } else {
+        angle = tanf(self.metrics.dotRadius / self.metrics.spinnerRadius) *2;
     }
-}
 
-- (CGFloat)radiansForCircleAtIndex:(NSInteger)idx {
-    return tan(self.metrics.circleRadius / self.metrics.spinnerRadius) * 2 * idx;
+    self.rLayer.instanceTransform = CATransform3DMakeRotation(angle, 0, 0, 1);
+    [CATransaction commit];
 }
 
 - (void)calculateMetrics {
     SnakeActivityIndicatorViewMetrics metrics;
     metrics.spinnerRadius = MIN(CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)) / 2;
-    metrics.circleRadius = metrics.spinnerRadius * 0.4 / 2;
-    metrics.spinnerRadius -= metrics.circleRadius / 2;
+    metrics.dotRadius = metrics.spinnerRadius * 0.4 / 2.0;
+    metrics.spinnerRadius -= metrics.dotRadius / 2.0;
     metrics.spinnerCenter = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
     self.metrics = metrics;
 }
 
 - (void)startAnimating {
+    //self.dotLayer.transform = CATransform3DMakeScale(1, 1, 1);
+    self.dotLayer.hidden = NO;
     switch (self.animationType) {
         case SnakeAnimationTypeRotate:
             [self animateWithRotation];
@@ -115,68 +119,51 @@ typedef struct SnakeActivityIndicatorViewMetrics SnakeActivityIndicatorViewMetri
 }
 
 - (void)stopAnimating {
-    for (NSInteger i = 0; i < self.numberOfCircles; i++) {
-        CALayer *circleLayer = self.layer.sublayers[i];
-        [circleLayer removeAllAnimations];
-        circleLayer.hidden = YES;
-    }
+    self.dotLayer.hidden = YES;
+    [self.dotLayer removeAllAnimations];
     _animating = NO;
 }
 
 - (void)animateWithScale {
-    for (NSInteger i = 0; i < self.numberOfCircles; i++) {
-        CALayer *circleLayer = self.layer.sublayers[i];
-        circleLayer.hidden = NO;
-        //circleLayer.affineTransform = CGAffineTransformMakeScale(0, 0);
-        
-        CABasicAnimation *scale = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-        scale.fromValue = @(1);
-        scale.toValue = @(0);
-        
-        CABasicAnimation *fade = [CABasicAnimation animationWithKeyPath:@"opacity"];
-        fade.fromValue = @(1);
-        fade.toValue = @(0);
-        
-        CAAnimationGroup *group = [CAAnimationGroup animation];
-        group.animations = @[scale, fade];
-        group.repeatCount = HUGE_VALF;
-        group.duration = self.fullCircleDuration;
-        group.beginTime = CACurrentMediaTime() - i * self.fullCircleDuration / 8;
-        
-        [circleLayer addAnimation:group forKey:nil];
-    }
+    CABasicAnimation *scale = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+    scale.fromValue = @(1);
+    scale.toValue = @(0);
+
+    CABasicAnimation *fade = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    fade.fromValue = @(1);
+    fade.toValue = @(0);
+
+    CAAnimationGroup *group = [CAAnimationGroup animation];
+    group.animations = @[scale, fade];
+    group.repeatCount = HUGE_VALF;
+    group.duration = self.fullRotationDuration;
+    self.dotLayer.transform = CATransform3DMakeScale(0, 0, 0);
+    self.rLayer.instanceDelay = self.fullRotationDuration / 8;
+    [self.dotLayer addAnimation:group forKey:nil];
+
 }
 
 - (void)animateWithRotation {
-    for (NSInteger i = 0; i < self.numberOfCircles; i++) {
-        CALayer *circleLayer = self.layer.sublayers[i];
-        circleLayer.hidden = NO;
-        
-        CGFloat startAngle = [self radiansForCircleAtIndex:i];
-        CGFloat endAngle = startAngle - 2 * M_PI;
-        UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:self.metrics.spinnerCenter
-                                                            radius:self.metrics.spinnerRadius
-                                                        startAngle:startAngle
-                                                          endAngle:endAngle
-                                                         clockwise:NO];
-        
-        CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
-        animation.path = [path CGPath];
-        
-        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    CGFloat startAngle = 0;
+    CGFloat endAngle = -2 * M_PI;
 
-        // Play with the media function at http://cubic-bezier.com/
-        //CAMediaTimingFunction *function = [CAMediaTimingFunction functionWithControlPoints:0.42:0:.58:1];
-        CAMediaTimingFunction *function = [CAMediaTimingFunction functionWithControlPoints:0.13:0.65:.3:.83];
-        //CAMediaTimingFunction *function = [CAMediaTimingFunction functionWithControlPoints:.77:.25:.93:.37];
-        
-        animation.timingFunction = function;
-        animation.repeatCount = HUGE_VALF;
-        animation.duration = 1.6;
-        animation.beginTime = CACurrentMediaTime() + i * 0.065;
+    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:self.metrics.spinnerCenter
+                                                        radius:self.metrics.spinnerRadius - self.metrics.dotRadius/2
+                                                    startAngle:startAngle
+                                                      endAngle:endAngle
+                                                     clockwise:NO];
 
-        [circleLayer addAnimation:animation forKey:nil];
-    }
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    animation.path = [path CGPath];
+
+    // Play with the media function at http://cubic-bezier.com/
+    CAMediaTimingFunction *function = [CAMediaTimingFunction functionWithControlPoints:0.6:0.6:1:0];
+    animation.timingFunction = function;
+    animation.repeatCount = HUGE_VALF;
+    animation.duration = 1.6;
+
+    self.rLayer.instanceDelay = 0.065;
+    [self.dotLayer addAnimation:animation forKey:nil];
 }
 
 @end
